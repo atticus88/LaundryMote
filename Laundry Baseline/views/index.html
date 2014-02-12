@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	 <script type="text/javascript" src="//www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {packages: ['corechart']});
+      var updateData = new Array();
+      updateData.push(['Time', 'Voltage', {type:'string', role:'annotation'}, 'Threshold' ]);
+    </script>
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<style>
+		.weber-nav {
+  			text-shadow: 0 -1px 0 rgba(0,0,0,.15);
+  			background-color: #563d7c;
+  			border-color: #463265;
+  			box-shadow: 0 1px 0 rgba(255,255,255,.1);
+		}
+
+		.weber-nav .navbar-collapse {
+  			border-color: #463265;
+		}
+		.weber-nav .navbar-brand {
+		  	color: #fff;
+		}
+		.weber-nav .navbar-nav > li > a {
+		  	color: #cdbfe3;
+		}
+		.weber-nav .navbar-nav > li > a:hover {
+		  	color: #fff;
+		}
+		.weber-nav .navbar-nav > .active > a,
+		.weber-nav .navbar-nav > .active > a:hover {
+		  	color: #fff;
+		  	background-color: #463265;
+		}
+		.weber-nav .navbar-toggle {
+		  	border-color: #563d7c;
+		}
+		.weber-nav .navbar-toggle:hover {
+		  	background-color: #463265;
+		  	border-color: #463265;
+		}
+        .light-blue {
+            background: #57c8f2;
+        }
+        .dark-grey {
+            background: #666;
+        }
+        .light-green {
+            background: #6ccac9;
+        }
+        .light-red {
+            background: #ff6c60;
+        }
+        .light-yellow {
+            background: #f8d347;
+        }
+        .value {
+            width: 68%;
+            font-size: 13px;
+            padding-top: 6px;
+            color: #797979;
+            float: right;
+            display: inline-block;
+            text-align: center;
+        }
+        .symbol {
+            width: 30%;
+            color: #fff;
+            padding: 25px 15px;
+            -webkit-border-radius: 4px 0px 0px 4px;
+            border-radius: 4px 0px 0px 4px;
+            display: inline-block;;
+            text-transform: center;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 18px;
+
+        }
+	</style>
+	<script>
+		var socket = io.connect(window.location.protocol + "//" + window.location.host); 
+		socket.on("update", function(data) {
+			console.log(data);
+    			var annotation = '';
+    			if (data['alert'] == 1) {
+    				annotation = 'A';
+    			}
+
+            		updateData.push([data['uptime'], parseInt(data['voltage']), annotation, 1200]);
+            		var info = google.visualization.arrayToDataTable(updateData);
+            		var chart = new google.visualization.ComboChart(document.getElementById('washer'));
+
+            	chart.draw(info, {
+                	title: 'Washer Voltage',
+                	legend: {position:'none'},
+                	hAxis: {slantedText:true},
+                	seriesType: "area",
+                	series: {1: {type: "line"}}
+        		});
+		});
+	</script>
+    <script type="text/javascript">
+        $(function() {
+            $.get('/data', function(data){
+                for (var i = 0; i < data.length; i++) {
+                	var annotation = ''
+                	if (data[i]['alert'] == 1) {
+                		annotation = 'A';
+                	}
+                    updateData.push([data[i]['uptime'], parseInt(data[i]['voltage']), annotation, 1200]);
+                }
+                var info = google.visualization.arrayToDataTable(updateData);
+                var chart = new google.visualization.ComboChart(document.getElementById('washer'));
+
+                chart.draw(info, {
+                    title: 'Washer Voltage',
+                    legend: {position:'none'},
+                    hAxis: {slantedText:true},
+                    seriesType: "area",
+                    series: {1: {type: "line"}}
+                });
+            });
+        });
+    </script>
+	</head>
+	<body>
+	<div class="navbar navbar-inverse weber-nav navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Laundry Admin</a>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="margin-top:70px;">
+        <div id="washer" style="position:absolute;top:75px;left:100px;width:1750px; height: 400px;"></div>
+    </div>
+</body>
+    <script src="js/bootstrap.min.js"></script>
+</html>
