@@ -197,7 +197,7 @@ void loop() {
         }
 
         //Serial.print("   [RX_RSSI:");
-        Serial.print(radio.readRSSI());
+        //Serial.print(radio.readRSSI());
         //Serial.print("]");
         
         if (radio.ACK_REQUESTED) {

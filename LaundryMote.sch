@@ -2600,8 +2600,8 @@ type 0309, grid 2.5 mm</description>
 <net name="GND" class="0">
 <segment>
 <pinref part="ANALOGSIDE" gate="G$1" pin="1"/>
-<wire x1="17.78" y1="68.58" x2="17.78" y2="66.04" width="0.1524" layer="91"/>
-<label x="17.78" y="66.04" size="1.778" layer="95" rot="R270" xref="yes"/>
+<wire x1="17.78" y1="68.58" x2="12.7" y2="68.58" width="0.1524" layer="91"/>
+<label x="12.7" y="68.58" size="1.778" layer="95" rot="R270" xref="yes"/>
 </segment>
 <segment>
 <pinref part="WASHER" gate="G$1" pin="TIP"/>
