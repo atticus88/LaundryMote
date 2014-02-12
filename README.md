@@ -16,5 +16,8 @@ Start the server
 ```
 server@server$ node server.js
 ```
+
+If the server errors out try starting it again somtimes the `LaundryMote: 915 Mhz....` will cause the server to stop.
+
 Browse to http://localhost:3030/
 
